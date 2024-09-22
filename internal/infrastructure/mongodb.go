@@ -10,6 +10,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 const (
@@ -73,4 +75,16 @@ func (infra *Infrastructure) configMongoDB() (*mongo.Database, error, func()) {
 	return db, nil, func() {
 		_ = mdb.Close()
 	}
+}
+
+func NewGormMysqlConnection(ctx context.Context, cfg config.Config) (conn *gorm.DB, err error) {
+	conn, err = gorm.Open(
+		mysql.Open(cfg.DB.MysqlUri),
+		&gorm.Config{},
+	)
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	return conn, nil
 }

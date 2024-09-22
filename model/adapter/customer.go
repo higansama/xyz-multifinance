@@ -1,4 +1,4 @@
-package adapter
+package entity
 
 import (
 	"time"
@@ -18,7 +18,7 @@ type Customer struct {
 	Salary     float64
 	PhotoID    string
 	Selfie     string
-	LoanType   Loan
-	CreatedAt  time.Time `gorm:"autoCreateTime"`
-	UpdatedAt  time.Time `gorm:"autoUpdateTime"`
+	// LoanType   Loan
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 }

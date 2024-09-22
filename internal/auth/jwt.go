@@ -14,7 +14,7 @@ type JwtClaims struct {
 	UserId    string `json:"user_id"`
 	UserName  string `json:"user_name"`
 	UserEmail string `json:"user_email"`
-	UserRole  string `json:"user_role"`
+	Salary    int    `json:"salary"`
 	// UserIsAMaster    bool   `json:"user_master"`
 	// UserIsADoa       bool   `json:"user_doa"`
 	// OldUserId        string `json:"_id"`
@@ -26,7 +26,7 @@ type GenerateAuthTokenOptions struct {
 	UserId    string
 	UserName  string
 	UserEmail string
-	UserRole  string
+	Salary    int
 }
 
 func GenerateAuthToken(config config.Config, opts GenerateAuthTokenOptions) (string, error) {
@@ -34,7 +34,7 @@ func GenerateAuthToken(config config.Config, opts GenerateAuthTokenOptions) (str
 		UserId:           opts.UserId,
 		UserName:         opts.UserName,
 		UserEmail:        opts.UserEmail,
-		UserRole:         opts.UserRole,
+		Salary:           opts.Salary,
 		RegisteredClaims: jwt.RegisteredClaims{IssuedAt: jwt.NewNumericDate(time.Now()), ExpiresAt: jwt.NewNumericDate(carbon.Now().AddDay().ToStdTime())},
 	}
 

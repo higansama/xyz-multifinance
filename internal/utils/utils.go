@@ -281,7 +281,7 @@ func ArrayStringIncludes(data []string, val string, strict bool) bool {
 }
 
 func MapStringIncludes(data map[string]string, val string, strict bool) bool {
-	for k, _ := range data {
+	for k := range data {
 		if k == val || (!strict && strings.ToLower(val) == strings.ToLower(k)) {
 			return true
 		}
@@ -494,4 +494,70 @@ func DisplayableFloat(v float64, format string) string {
 		return fmt.Sprintf("%d", int64(v))
 	}
 	return fmt.Sprintf(format, v)
+}
+
+func CreateAdminFee(hargaOtr int) int {
+	return int(math.Ceil(float64(float64(hargaOtr) * 0.025)))
+}
+
+func GenerateKontrakCode() []string {
+	// Seed the random number generator
+	rand.Seed(time.Now().UnixNano())
+
+	// Create a slice to hold the random integers
+	var randomInts []string
+
+	// Generate 5 random integers and convert to strings
+	for i := 0; i < 5; i++ {
+		num := rand.Intn(100)                              // Generate a random integer between 0 and 99
+		randomInts = append(randomInts, strconv.Itoa(num)) // Convert to string and append
+	}
+
+	// Print the random integers as strings
+	return randomInts
+}
+
+func TanggalJatuhTempo() string {
+	date := time.Now()
+
+	_, _, d := date.Date()
+
+	if d > 30 {
+		return strconv.Itoa(d)
+	}
+
+	return strconv.Itoa(d)
+}
+
+// FormatRupiah formats an integer to Rupiah format with thousand separators.
+func FormatRupiah(amount int) string {
+	// Convert integer to string
+	strAmount := strconv.Itoa(amount)
+
+	// Reverse the string for easier grouping
+	reversed := reverseString(strAmount)
+
+	// Group by three digits using a dot as a separator
+	var grouped []string
+	for i := 0; i < len(reversed); i += 3 {
+		end := i + 3
+		if end > len(reversed) {
+			end = len(reversed)
+		}
+		grouped = append(grouped, reversed[i:end])
+	}
+
+	// Reverse the grouped string and join with dots
+	result := reverseString(strings.Join(grouped, "."))
+
+	return "Rp " + result
+}
+
+// Helper function to reverse a string
+func reverseString(s string) string {
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
 }

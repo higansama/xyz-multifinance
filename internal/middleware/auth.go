@@ -60,7 +60,7 @@ func (m *AuthMiddleware) CreateJwtToken() (string, error) {
 		UserId:           "5df70a27127bfc211ceb1a46",
 		UserName:         "",
 		UserEmail:        "",
-		UserRole:         "",
+		Salary:           0,
 		RegisteredClaims: jwt.RegisteredClaims{ID: uuid.New().String(), ExpiresAt: jwt.NewNumericDate(carbon.Now().AddYears(60).ToStdTime())},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

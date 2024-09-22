@@ -1,4 +1,4 @@
-package usecase
+package usecasev1
 
 import (
 	domain "github.com/higansama/xyz-multi-finance/customer"
@@ -10,7 +10,7 @@ type CustomerUsecase struct {
 	repo  domain.Repository
 }
 
-func NewUserUsecase(
+func NewCustomerUsecase(
 	infra *infrastructure.Infrastructure,
 	repo domain.Repository,
 ) (domain.Usecase, error) {

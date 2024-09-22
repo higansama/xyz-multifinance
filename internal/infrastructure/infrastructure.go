@@ -16,8 +16,10 @@ import (
 	"github.com/higansama/xyz-multi-finance/internal/processor"
 	"github.com/higansama/xyz-multi-finance/internal/redis"
 	"github.com/higansama/xyz-multi-finance/internal/request"
+	"gorm.io/gorm"
 
 	// "github.com/higansama/xyz-multi-finance/internal/template"
+
 	"github.com/higansama/xyz-multi-finance/internal/utils"
 	"github.com/higansama/xyz-multi-finance/internal/validator"
 	"github.com/pkg/errors"
@@ -30,6 +32,7 @@ type Infrastructure struct {
 	Env             app.Environment
 	Config          config.Config
 	MongoDB         *mongo.Database
+	MysqlGorm       *gorm.DB
 	Redis           *redis.Client
 	Cache           *cache.Cache
 	Locker          *locker.Locker
@@ -68,30 +71,30 @@ func (infra *Infrastructure) InitInfrastructure(ctx context.Context) (*Infrastru
 	}
 	infra.Env = env
 
-	mongoDB, err, mongoCleanup := infra.configMongoDB()
-	if err != nil {
-		return nil, err, nil
-	}
-	cleanup = append(cleanup, mongoCleanup)
-	infra.MongoDB = mongoDB
+	// mongoDB, err, mongoCleanup := infra.configMongoDB()
+	// if err != nil {
+	// 	return nil, err, nil
+	// }
+	// cleanup = append(cleanup, mongoCleanup)
+	// infra.MongoDB = mongoDB
 
-	redisClient, err, redisCleanup := infra.configRedis()
-	if err != nil {
-		return nil, err, nil
-	}
-	cleanup = append(cleanup, redisCleanup)
-	infra.Redis = redisClient
+	// redisClient, err, redisCleanup := infra.configRedis()
+	// if err != nil {
+	// 	return nil, err, nil
+	// }
+	// cleanup = append(cleanup, redisCleanup)
+	// infra.Redis = redisClient
 
-	redisStore := cache.NewRedisStore(redisClient)
-	infra.Cache = cache.NewCache(redisStore)
-	infra.Locker = locker.NewLocker(locker.NewRedisLocker(redisClient))
+	// redisStore := cache.NewRedisStore(redisClient)
+	// infra.Cache = cache.NewCache(redisStore)
+	// infra.Locker = locker.NewLocker(locker.NewRedisLocker(redisClient))
 
-	amqpConn, err, amqpCleanup := infra.configAmqp()
-	if err != nil {
-		return nil, err, nil
-	}
-	cleanup = append(cleanup, amqpCleanup)
-	infra.Amqp = amqpConn
+	// amqpConn, err, amqpCleanup := infra.configAmqp()
+	// if err != nil {
+	// 	return nil, err, nil
+	// }
+	// cleanup = append(cleanup, amqpCleanup)
+	// infra.Amqp = amqpConn
 
 	infra.Conforms = modifiers.New()
 
@@ -107,17 +110,25 @@ func (infra *Infrastructure) InitInfrastructure(ctx context.Context) (*Infrastru
 	}
 	infra.Middleware = middleware
 
-	infra.InboxRepo = inbox.NewMongoRepository(infra.Env, infra.MongoDB)
+	// infra.InboxRepo = inbox.NewMongoRepository(infra.Env, infra.MongoDB)
 
-	infra.OutboxRepo = outbox.NewMongoRepository(infra.Env, infra.MongoDB)
+	// infra.OutboxRepo = outbox.NewMongoRepository(infra.Env, infra.MongoDB)
 
-	infra.TxManager = db.NewMongoTransactionManager(infra.MongoDB)
+	// infra.TxManager = db.NewMongoTransactionManager(infra.MongoDB)
 
 	eventBus, err := infra.setupEventBus()
 	if err != nil {
 		return nil, err, nil
 	}
 	infra.EventBus = eventBus
+
+	infra.MysqlGorm, err = NewGormMysqlConnection(ctx, infra.Config)
+	if err != nil {
+		return nil, err, nil
+	}
+
+	// migrate
+	// migrate.NewMigrate(infra.Config)
 
 	// err = template.LoadTemplates()
 	// if err != nil {

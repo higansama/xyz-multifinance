@@ -24,7 +24,7 @@ func (r DomainError) Is(err error) bool {
 
 func NewDomainError(code string, message string) DomainError {
 	if code != "" {
-		code = "oca-" + code
+		code = "xyz-" + code
 	}
 
 	return DomainError{
