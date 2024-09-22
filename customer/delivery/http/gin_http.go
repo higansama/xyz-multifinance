@@ -45,7 +45,6 @@ func (h *Handler) Register(c *gin.Context) {
 		response.NewResponseError(c, err)
 		return
 	}
-
 	err = payload.Validate()
 	if err != nil {
 		response.NewResponseError(c, err)
