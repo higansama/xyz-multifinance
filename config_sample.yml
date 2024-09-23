@@ -1,0 +1,22 @@
+app:
+  name: xyz-multifinance
+  env: development
+  debug: true
+  host: localhost
+  port: 8080
+
+auth:
+  jwt_secret: your_secret_key
+
+db:
+  mongodb:
+    uri: mongodb://localhost:27017/your_database
+  redis:
+    addr: localhost:6379
+    password: ""
+    db: 0
+  mysql_uri: mysql://root@localhost:3306/your_database
+
+messaging:
+  rabbitmq:
+    url: amqp://localhost:5672
